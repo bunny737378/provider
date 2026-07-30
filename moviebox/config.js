@@ -145,6 +145,8 @@ function handleRequest(reqJsonStr) {
             res = handleSeasons(req);
         } else if (type === "stream") {
             res = handleStreams(req);
+        } else if (type === "download") {
+            res = handleDownload(req);  // ← ALAG CLASS CALL
         } else if (type === "apislist") {
             res = getApisList();
         } else {
@@ -164,11 +166,11 @@ function getApisList() {
             qsearch: true,
             searchtext: [
                 {
-                    name: "Movie",
+                    name: "Movie Search",
                     field: "msearch"
                 },
                 {
-                    name: "Tv",
+                    name: "TV Search",
                     field: "tvsearch"
                 }
             ]
