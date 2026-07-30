@@ -1,0 +1,83 @@
+{
+  "New": [
+    {"i": "slide", "nm": "slug"},
+    {"i": "mapp-1", "nm": "New Release"}
+  ],
+  "Trending": [
+    {"i": "slug-app-32", "nm": "slug"},
+    {"i": "mapp-32", "nm": "Trending Now"}
+  ],
+  "OTT": [
+    {"i": "slug-ott-8", "nm": "slug"},
+    {"i": "mott-8", "nm": "Netflix"},
+    {"i": "ott-9", "nm": "Amazon Prime"},
+    {"i": "ott-10", "nm": "JioHotstar"},
+    {"i": "ott-11", "nm": "ZEE5"},
+    {"i": "ott-12", "nm": "Sony LIV"},
+    {"i": "ott-14", "nm": "MX Player"},
+    {"i": "ott-15", "nm": "Shemaroo Me"},
+    {"i": "ott-16", "nm": "HBO"},
+    {"i": "ott-17", "nm": "Apple TV+"},
+    {"i": "ott-39", "nm": "JOJO"}
+  ],
+  "Languages": [
+    {"i": "slug-app-3", "nm": "slug"},
+    {"i": "mapp-3", "nm": "Hollywood (Multi Language)"},
+    {"i": "app-4", "nm": "Bollywood Movies"},
+    {"i": "app-6", "nm": "South in Hindi"},
+    {"i": "app-7", "nm": "International Movies"},
+    {"i": "app-15", "nm": "Gujarati"},
+    {"i": "app-46", "nm": "Punjabi Movies"},
+    {"i": "app-47", "nm": "Marathi Movies"},
+    {"i": "categ-12", "nm": "Bollywood"},
+    {"i": "categ-13", "nm": "Hollywood hindi/eng"},
+    {"i": "categ-14", "nm": "Hollywood eng"},
+    {"i": "categ-15", "nm": "South (Dub)"},
+    {"i": "categ-18", "nm": "Gujarati"},
+    {"i": "categ-21", "nm": "Marathi"},
+    {"i": "categ-22", "nm": "Punjabi"}
+  ],
+  "Webseries": [
+    {"i": "slug-app-2", "nm": "slug"},
+    {"i": "mapp-2", "nm": "Indian Web Series"},
+    {"i": "app-5", "nm": "Web Series Foreign"},
+    {"i": "app-12", "nm": "International Web Series in Hindi"},
+    {"i": "app-50", "nm": "18+ Hot Web Series"},
+    {"i": "categ-16", "nm": "Web series & TV Shows (Indian)"},
+    {"i": "categ-17", "nm": "Web series International"}
+  ],
+  "Genres": [
+    {"i": "slug-app-8", "nm": "slug"},
+    {"i": "mapp-8", "nm": "Classic Bollywood"},
+    {"i": "app-9", "nm": "Bollywood Comedy"},
+    {"i": "app-11", "nm": "Animated Movies & Series"},
+    {"i": "app-13", "nm": "Super Hero Action"},
+    {"i": "app-14", "nm": "Classic Tv Indian"},
+    {"i": "app-17", "nm": "Bond 007"},
+    {"i": "app-18", "nm": "Hollywood Action"},
+    {"i": "app-19", "nm": "Stand Up Comedy"},
+    {"i": "app-20", "nm": "Racing Action"},
+    {"i": "app-27", "nm": "Natak Gujarati Dhamal Comedy"},
+    {"i": "app-28", "nm": "Sports Movies"},
+    {"i": "app-31", "nm": "Gangster Movies"},
+    {"i": "app-36", "nm": "Biography"},
+    {"i": "app-38", "nm": "Hollywood Comedy"},
+    {"i": "app-39", "nm": "Horror"},
+    {"i": "app-40", "nm": "Documentaries"},
+    {"i": "app-41", "nm": "Bollywood Romantic Movies"},
+    {"i": "app-58", "nm": "Korean Drama"},
+    {"i": "app-60", "nm": "Offbeat bollywood"},
+    {"i": "app-61", "nm": "Intense Love Stories"},
+    {"i": "categ-19", "nm": "Cartoon, Kids & Comedy"}
+  ],
+  "Actors": [
+    {"i": "slug-app-21", "nm": "slug"},
+    {"i": "mapp-21", "nm": "Akshay Kumar"},
+    {"i": "app-23", "nm": "Angry Young Man Amitabh"},
+    {"i": "app-24", "nm": "Shah Rukh Khan"},
+    {"i": "app-25", "nm": "Salman Khan"},
+    {"i": "app-26", "nm": "Aamir Khan"},
+    {"i": "app-45", "nm": "First Superstar RAJESH KHANNA"},
+    {"i": "app-59", "nm": "He-man Dharmendra"}
+  ]
+}
