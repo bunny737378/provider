@@ -1,14 +1,17 @@
 [
   {
     "id": "moviebox",
-    "name": "MovieBox"
+    "name": "MovieBox",
+    "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/moviebox/moviebox.png"
   },
   {
     "id": "mxplayer",
-    "name": "MX Player"
+    "name": "MX Player",
+    "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/mxplayer/mxplayer.png"
   },
   {
     "id": "sff",
-    "name": "Special Effects"
+    "name": "Special Effects",
+    "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/sff/sff.png"
   }
 ]
