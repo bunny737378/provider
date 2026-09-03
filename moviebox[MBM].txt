@@ -1,0 +1,73 @@
+🔵 Search memberinfo in classname and open it and find n replce
+
+====Method isActive===
+
+Add
+
+    const/4 v0, 0x1
+   
+   
+ 🔵 then again come back n search MemberCheckResult in classname and open it then find and replec this 👇
+   
+====Method isPassed() , getVipEnable() , getVipPayEnable()===
+
+Replace
+
+    const/4 v0, 0x1
+
+    invoke-static {v0}, Ljava/lang/Boolean;->valueOf(Z)Ljava/lang/Boolean;
+
+    move-result-object v0
+    
+====Method getMultiDownloadLimit()===
+
+Replace
+
+    const v0, 0x186a0
+
+    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0
+    
+🔵 Now come back and search "check-update" in smali. u will find one endpoint,so just go and make the "check-update" to "check-upda" Done ✅
+
+[ after this updates ur done the app is 100% moded use all vip features all for free 😏]
+
+
+
+
+
+
+
+Get movie box app Dow link many links will come all of them were official https://h5-api.aoneroom.com/wefeed-h5api-bff/app/get-latest-app-pkgs?app_name=moviebox [ For modding the app download the play store verisons from it ]
+
+
+
+
+
+
+here are some more changes u can do in member info class if u want for modify some ui or u can ignore this 👇 
+
+    
+ ====Method getDaysLeft===
+
+Replace
+
+    const v0, 0x186a0 #100,000days
+
+    invoke-static {v0}, Ljava/lang/Integer;->valueOf(I)Ljava/lang/Integer;
+
+    move-result-object v0    
+    
+====Method getExpiryDate===
+
+Replace
+
+    const-string v0, "2099-12-31"
+    
+====Method getMemberType===
+
+Replace
+
+    const/4 v0, 0x3 #premiumshow
+       
