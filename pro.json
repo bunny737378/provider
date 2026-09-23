@@ -8,10 +8,5 @@
     "id": "mxplayer",
     "name": "MX Player",
     "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/mxplayer/mxplayer.png"
-  },
-  {
-    "id": "sff",
-    "name": "Special Effects",
-    "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/sff/sff.png"
   }
 ]
