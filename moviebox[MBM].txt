@@ -43,7 +43,26 @@ Get movie box app Dow link many links will come all of them were official https:
 
 
 
+🔵 New moddings steps 👇
 
+if the app is old then change the app veriosn and veriosn code. Then agar app ke dex mai X-Client-Build Nai hai to phir Dex maii ye search karo "x-play-mode" and usi method mai ye add karna hai
+
+    :goto_51
+    sget-object v8, Leh/b;->a:Leh/b$a;
+
+    const-string v9, "X-Client-Build"
+
+    const-string v6, "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a"
+
+    invoke-virtual {v8, v9, v6}, Leh/b$a;->b(Ljava/lang/String;Ljava/lang/String;)V
+
+    invoke-virtual {v1}, Lcom/transsion/baselib/report/launch/b;->b()Lcom/tencent/mmkv/MMKV;
+    
+
+Ye uska ye value "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a" change ho sakta h har veriosn ke sath,So you have to update it for every update.
+
+
+aur agar app ke ander x client build hai to phir bhi yahi dalan hai mtlab usme dynamic bnata hoga use fixed kar dena hai.
 
 
 here are some more changes u can do in member info class if u want for modify some ui or u can ignore this 👇 
