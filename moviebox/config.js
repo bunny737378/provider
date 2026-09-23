@@ -1,8 +1,8 @@
 const S = "76iRl07s0xSN9jqmEWAt79EBJZulIQIsV64FZr2O";
 const C = JSON.stringify({
     "package_name": "com.community.oneroom",
-    "version_name": "3.0.03.0529.03",
-    "version_code": 50020042,
+    "version_name": "5.0.02.0831.05",
+    "version_code": 50020130,
     "os": "android",
     "os_version": "9",
     "install_ch": "ps",
@@ -108,6 +108,7 @@ function callApi(u, method, bodyStr) {
     let headers = {
         "User-Agent": U,
         "Accept": "application/json",
+        "X-Client-Build": "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a",
         "Content-Type": "application/json; charset=utf-8",
         "X-Client-Token": genToken(ts),
         "x-tr-signature": genSignature(m, "application/json", "application/json; charset=utf-8", u, b, ts),
