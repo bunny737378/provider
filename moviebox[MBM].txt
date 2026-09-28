@@ -45,7 +45,66 @@ Get movie box app Dow link many links will come all of them were official https:
 
 🔵 New moddings steps 👇
 
-if the app is old then change the app veriosn and veriosn code. Then agar app ke dex mai X-Client-Build Nai hai to phir Dex maii ye search karo "x-play-mode" and usi method mai ye add karna hai
+if the app is old then change the app veriosn and veriosn code or dex mai modify kar do dex open kaor and smali m search karo "x-client-info" phir waha pe esa hoga 👇
+
+method private final a(Lokhttp3/Request;Ljava/lang/String;)Lokhttp3/Request;
+    .registers 5
+
+    .line 1
+    sget-object p2, Leh/b;->a:Leh/b$a;
+
+    .line 3
+    invoke-virtual {p2}, Leh/b$a;->c()Ljava/lang/String;
+
+    .line 6
+    move-result-object v0
+
+    .line 7
+    invoke-virtual {p1}, Lokhttp3/Request;->newBuilder()Lokhttp3/Request$Builder;
+
+    .line 10
+    move-result-object p1
+
+    .line 11
+    const-string v1, "X-Client-Info"
+
+    .line 13
+    invoke-virtual {p1, v1, v0}, Lokhttp3/Request$Builder;->addHeader(Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Request$Builder;
+
+    .line 16
+    invoke-virtual {p2}, Leh/b$a;->d()Ljava/lang/Boolean;
+    
+    
+    
+    isme esa Karo do 👇
+    
+method private final a(Lokhttp3/Request;Ljava/lang/String;)Lokhttp3/Request;
+    .registers 5
+
+    .line 1
+    sget-object p2, Leh/b;->a:Leh/b$a;
+
+    const-string v0, "{\"package_name\":\"com.community.oneroom\",\"version_name\":\"5.0.02.0831.05\",\"version_code\":50020130,\"os\":\"android\",\"os_version\":\"16\",\"install_ch\":\"google-play\",\"device_id\":\"2c25301e1e8d8f36dad83d8600bf24fe\",\"install_store\":\"gp\",\"gaid\":\"9b9d005f-ddc1-4f19-ba9c-4744807f8125\",\"brand\":\"Samsung\",\"model\":\"SM-S928B\",\"system_language\":\"en\",\"net\":\"WIFI\",\"region\":\"IN\",\"timezone\":\"Asia/Kolkata\",\"sp_code\":\"405863\",\"X-Client-Build\":\"1790144723381916466.632cf3fe507b339bc757f117f85b4c4a\",\"X-Play-Mode\":\"2\",\"X-Idle-Data\":\"1\",\"X-Family-Mode\":\"0\",\"X-Content-Mode\":\"0\"}"
+
+    .line 7
+    invoke-virtual {p1}, Lokhttp3/Request;->newBuilder()Lokhttp3/Request$Builder;
+
+    .line 10
+    move-result-object p1
+
+    .line 11
+    const-string v1, "X-Client-Info"
+
+    .line 13
+    invoke-virtual {p1, v1, v0}, Lokhttp3/Request$Builder;->addHeader(Ljava/lang/String;Ljava/lang/String;)Lokhttp3/Request$Builder;
+
+    .line 16
+    invoke-virtual {p2}, Leh/b$a;->d()Ljava/lang/Boolean;
+    
+    
+    
+    
+🔵 . Then agar app ke dex mai X-Client-Build Nai hai to phir Dex maii ye search karo "x-play-mode" and usi method mai ye add karna hai
 
     :goto_51
     sget-object v8, Leh/b;->a:Leh/b$a;
