@@ -149,3 +149,199 @@ Replace
 
     const/4 v0, 0x3 #premiumshow
        
+       
+       
+       
+🔵 Login bypass patch 👇
+
+
+go to "com/transsion/usercenter/me/adapter/z.smali"
+
+replace C method
+
+.method private final C()Z
+    .registers 2
+
+    const/4 v0, 0x0
+
+    return v0
+.end method
+
+replace D method
+
+.method private final D(Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;Lcom/transsnet/loginapi/bean/UserInfo;)V
+    .registers 14
+
+    const-string v0, "Ur Senpai" #name
+
+    const-string v1, "2612043" #user id
+
+    const-string v2, "100000001"
+
+    const-string v3, "user.jpg" #put your avtar img in assets folder of app
+
+    const/4 v4, 0x1 #1=male 2= female
+
+    const/16 v5, 0x10 #age 16
+
+    if-nez p2, :cond_12
+
+    new-instance p2, Lcom/transsnet/loginapi/bean/UserInfo;
+
+    invoke-direct {p2}, Lcom/transsnet/loginapi/bean/UserInfo;-><init>()V
+
+    :cond_12
+    invoke-virtual {p2, v2}, Lcom/transsnet/loginapi/bean/UserInfo;->setUserId(Ljava/lang/String;)V
+
+    invoke-virtual {p2, v1}, Lcom/transsnet/loginapi/bean/UserInfo;->setUsername(Ljava/lang/String;)V
+
+    invoke-virtual {p2, v0}, Lcom/transsnet/loginapi/bean/UserInfo;->setNickname(Ljava/lang/String;)V
+
+    invoke-virtual {p2, v4}, Lcom/transsnet/loginapi/bean/UserInfo;->setUserType(I)V
+
+    invoke-virtual {p2, v4}, Lcom/transsnet/loginapi/bean/UserInfo;->setGender(I)V
+
+    invoke-virtual {p2, v5}, Lcom/transsnet/loginapi/bean/UserInfo;->setAge(I)V
+
+    invoke-virtual {p2, v3}, Lcom/transsnet/loginapi/bean/UserInfo;->setAvatar(Ljava/lang/String;)V
+
+    sget v6, Lcom/transsion/usercenter/R$id;->loginTv:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    const/16 v7, 0x8
+
+    invoke-virtual {v6, v7}, Landroid/view/View;->setVisibility(I)V
+
+    const/4 v8, 0x0
+
+    sget v6, Lcom/transsion/usercenter/R$id;->avatarIV:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    invoke-virtual {v6, v8}, Landroid/view/View;->setVisibility(I)V
+
+    sget v6, Lcom/transsion/usercenter/R$id;->nameTv:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/widget/TextView;
+
+    invoke-virtual {v6, v0}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    sget-object v9, Landroid/graphics/Typeface;->DEFAULT_BOLD:Landroid/graphics/Typeface;
+
+    invoke-virtual {v6, v9}, Landroid/widget/TextView;->setTypeface(Landroid/graphics/Typeface;)V
+
+    const/4 v9, 0x0
+
+    invoke-virtual {v6, v9, v9, v9, v9}, Landroid/widget/TextView;->setCompoundDrawablesWithIntrinsicBounds(Landroid/graphics/drawable/Drawable;Landroid/graphics/drawable/Drawable;Landroid/graphics/drawable/Drawable;Landroid/graphics/drawable/Drawable;)V
+
+    sget v6, Lcom/transsion/usercenter/R$id;->idTv:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/widget/TextView;
+
+    new-instance v9, Ljava/lang/StringBuilder;
+
+    invoke-direct {v9}, Ljava/lang/StringBuilder;-><init>()V
+
+    const-string v10, "ID: "
+
+    invoke-virtual {v9, v10}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v9, v1}, Ljava/lang/StringBuilder;->append(Ljava/lang/String;)Ljava/lang/StringBuilder;
+
+    invoke-virtual {v6, v9}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    sget v6, Lcom/transsion/usercenter/R$id;->genderTv:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/widget/TextView;
+
+    invoke-virtual {v6, v8}, Landroid/view/View;->setVisibility(I)V
+
+    sget v9, Lcom/transsion/usercenter/R$mipmap;->profile_man:I
+
+    invoke-virtual {v6, v9, v8, v8, v8}, Landroid/widget/TextView;->setCompoundDrawablesWithIntrinsicBounds(IIII)V
+
+    invoke-static {v5}, Ljava/lang/String;->valueOf(I)Ljava/lang/String;
+
+    move-result-object v9
+
+    invoke-virtual {v6, v9}, Landroid/widget/TextView;->setText(Ljava/lang/CharSequence;)V
+
+    sget v6, Lcom/transsion/usercenter/R$id;->avatarIV:I
+
+    invoke-virtual {p1, v6}, Lcom/chad/library/adapter/base/viewholder/BaseViewHolder;->getView(I)Landroid/view/View;
+
+    move-result-object v6
+
+    check-cast v6, Landroid/widget/ImageView;
+
+    :try_start_87
+    invoke-virtual {v6}, Landroid/view/View;->getContext()Landroid/content/Context;
+
+    move-result-object v9
+
+    invoke-virtual {v9}, Landroid/content/Context;->getAssets()Landroid/content/res/AssetManager;
+
+    move-result-object v9
+
+    invoke-virtual {v9, v3}, Landroid/content/res/AssetManager;->open(Ljava/lang/String;)Ljava/io/InputStream;
+
+    move-result-object v9
+
+    invoke-static {v9}, Landroid/graphics/BitmapFactory;->decodeStream(Ljava/io/InputStream;)Landroid/graphics/Bitmap;
+
+    move-result-object v9
+
+    invoke-virtual {v6, v9}, Landroid/widget/ImageView;->setImageBitmap(Landroid/graphics/Bitmap;)V
+    :try_end_9a
+    .catch Ljava/io/IOException; {:try_start_87 .. :try_end_9a} :catch_9b
+
+    goto :goto_a1
+
+    :catch_9b
+    move-exception v9
+
+    sget v9, Lcom/tn/lib/widget/R$mipmap;->profile_default_avatar:I
+
+    invoke-virtual {v6, v9}, Landroid/widget/ImageView;->setImageResource(I)V
+
+    :goto_a1
+    invoke-virtual {v6, v8}, Landroid/view/View;->setClickable(Z)V
+
+    iget-object v6, p1, Landroidx/recyclerview/widget/RecyclerView$a0;->itemView:Landroid/view/View;
+
+    invoke-virtual {v6, v8}, Landroid/view/View;->setClickable(Z)V
+
+    return-void
+.end method
+
+
+Now go to "com/transsion/usercenter/profile/ProfileFragment.smali"
+
+replace checkLogin
+
+.method private final checkLogin()Z
+    .registers 5
+
+    const/4 v0, 0x1
+
+    return v0
+.end method
+
+
