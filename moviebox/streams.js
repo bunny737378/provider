@@ -1,106 +1,157 @@
-// ============================================
-// STREAM HANDLER
-// ============================================
-function handleStreams(req) {
-    let p = (req.id || "").split("--");
-    if (p.length != 2) return [];
+function parseMedia(u, type, headers) {
+    let q = [], a = [];
 
-    let f = p[0].split("-");
-    if (f.length != 3) return [];
+    try {
+        let r = Network.get(u, JSON.stringify(headers));
+        let t = JSON.parse(r).body || "";
+        type = (type || "").toLowerCase();
 
-    let sid = f[0], se = parseInt(f[1]), ep = parseInt(f[2]);
+        if (type === "mpd" || type === "dash" || /\.mpd(?:\?|$)/i.test(u)) {
+            (t.match(/<Representation\b[^>]*>/gi) || []).forEach(x => {
+                let mime = (x.match(/\bmimeType="([^"]+)"/i) || [])[1] || "";
+                let codecs = (x.match(/\bcodecs="([^"]+)"/i) || [])[1] || "";
+                let height = (x.match(/\bheight="(\d+)"/i) || [])[1];
 
-    let play = callApi(API + "/play-info?subjectId=" + sid + "&se=" + se + "&ep=" + ep, "GET");
-
-    let subs = [], id = null;
-
-    if (play && play.code == 0 && play.data && play.data.streams) {
-        if (play.data.streams.length) id = play.data.streams[0].id;
-    }
-
-    if (id) {
-        let c = callApi(API + "/get-stream-captions?subjectId=" + sid + "&streamId=" + id, "GET");
-
-        if (c && c.code == 0 && c.data && c.data.extCaptions)
-            c.data.extCaptions.forEach(x => subs.push({ name: x.lan || "", link: x.url || "" }));
-
-        if (!subs.length) {
-            c = callApi(API_RES + "/get-ext-captions?subjectId=" + sid + "&resourceId=" + id, "GET");
-            if (c && c.code == 0 && c.data && c.data.extCaptions)
-                c.data.extCaptions.forEach(x => subs.push({ name: x.lan || "", link: x.url || "" }));
-        }
-    }
-
-    let out = [];
-
-    if (play && play.code == 0 && play.data && play.data.streams) {
-        play.data.streams.forEach(s => {
-            out.push({
-                nm: (s.resolutions || "") + " [" + (s.format || "UNKNOWN") + "]",
-                Url: s.url || "",
-                refer: REFER,
-                Header: s.signCookie ? [{
-                    name: "Cookie",
-                    value: s.signCookie
-                }] : [],
-                Subtitle: subs
+                if (
+                    (/video/i.test(mime) ||
+                    /^(avc|hev|hvc|vp8|vp9|av01)/i.test(codecs)) &&
+                    height &&
+                    !q.includes(height + "p")
+                ) {
+                    q.push(height + "p");
+                }
             });
-        });
-    }
 
-    return out;
+            (t.match(/<AdaptationSet\b[\s\S]*?(?=<AdaptationSet\b|<\/Period>)/gi) || [])
+                .forEach(x => {
+                    let contentType = (x.match(/\bcontentType="([^"]+)"/i) || [])[1] || "";
+                    let mimeType = (x.match(/\bmimeType="([^"]+)"/i) || [])[1] || "";
+                    let lang = (x.match(/\blang="([^"]+)"/i) || [])[1] || "";
+
+                    if (
+                        lang &&
+                        (/audio/i.test(contentType) || /audio/i.test(mimeType)) &&
+                        !a.includes(lang)
+                    ) {
+                        a.push(lang);
+                    }
+                });
+
+            if (!a.length) {
+                (t.match(/\blang="([^"]+)"/gi) || []).forEach(x => {
+                    let lang = (x.match(/"([^"]+)"/) || [])[1];
+
+                    if (lang && !a.includes(lang))
+                        a.push(lang);
+                });
+            }
+        } else {
+            t.split(/\r?\n/).forEach(x => {
+                if (x.startsWith("#EXT-X-STREAM-INF:")) {
+                    let m = x.match(/RESOLUTION=\d+x(\d+)/i);
+
+                    if (m && !q.includes(m[1] + "p"))
+                        q.push(m[1] + "p");
+                }
+
+                if (x.startsWith("#EXT-X-MEDIA:")) {
+                    let mediaType = (x.match(/TYPE=([^,]+)/i) || [])[1] || "";
+                    let lang = (x.match(/LANGUAGE="([^"]*)"/i) || [])[1] || "";
+
+                    if (
+                        mediaType.toUpperCase() === "AUDIO" &&
+                        lang &&
+                        !a.includes(lang)
+                    ) {
+                        a.push(lang);
+                    }
+                }
+            });
+        }
+
+        q.sort((x, y) => parseInt(x) - parseInt(y));
+    } catch (e) {}
+
+    return { q, a };
 }
 
-// ============================================
-// DOWNLOAD HANDLER - ALAG CLASS
-// ============================================
-function handleDownload(req) {
+function getData(req) {
     let p = (req.id || "").split("--");
-    if (p.length != 2) return [];
+    let f = p[0]?.split("-");
 
-    let f = p[0].split("-");
-    if (f.length != 3) return [];
+    if (p.length !== 2 || f.length !== 3)
+        return [];
 
-    let sid = f[0], se = parseInt(f[1]), ep = parseInt(f[2]);
+    let [sid, se, ep] = f;
 
-    let play = callApi(API + "/play-info?subjectId=" + sid + "&se=" + se + "&ep=" + ep, "GET");
+    let play = callApi(
+        API + "/play-info?subjectId=" + sid +
+        "&se=" + parseInt(se) +
+        "&ep=" + parseInt(ep),
+        "GET"
+    );
 
-    let subs = [], id = null;
+    if (!play?.data?.streams?.length)
+        return [];
 
-    if (play && play.code == 0 && play.data && play.data.streams) {
-        if (play.data.streams.length) id = play.data.streams[0].id;
-    }
+    let streams = play.data.streams;
+    let first = streams[0];
+    let subs = [];
 
-    if (id) {
-        let c = callApi(API + "/get-stream-captions?subjectId=" + sid + "&streamId=" + id, "GET");
+    if (first?.id) {
+        let c = callApi(
+            API + "/get-stream-captions?subjectId=" + sid +
+            "&streamId=" + first.id,
+            "GET"
+        );
 
-        if (c && c.code == 0 && c.data && c.data.extCaptions)
-            c.data.extCaptions.forEach(x => subs.push({ name: x.lan || "", link: x.url || "" }));
+        if (!c?.data?.extCaptions?.length) {
+            c = callApi(
+                API_RES + "/get-ext-captions?subjectId=" + sid +
+                "&resourceId=" + first.id,
+                "GET"
+            );
+        }
 
-        if (!subs.length) {
-            c = callApi(API_RES + "/get-ext-captions?subjectId=" + sid + "&resourceId=" + id, "GET");
-            if (c && c.code == 0 && c.data && c.data.extCaptions)
-                c.data.extCaptions.forEach(x => subs.push({ name: x.lan || "", link: x.url || "" }));
+        if (c?.data?.extCaptions) {
+            subs = c.data.extCaptions.map(x => ({
+                label: x.lan || "",
+                url: x.url || ""
+            }));
         }
     }
 
-    let out = [];
+    return streams.map((s, i) => {
+        let headers = {};
 
-    if (play && play.code == 0 && play.data && play.data.streams) {
-        play.data.streams.forEach(s => {
-            out.push({
-                Type: "2",
-                nm: (s.resolutions || "") + " [DOWNLOAD]",
-                Url: s.url || "",
-                refer: REFER,
-                Header: s.signCookie ? [{
-                    name: "Cookie",
-                    value: s.signCookie
-                }] : [],
-                Subtitle: subs
-            });
-        });
-    }
+        if (REFER)
+            headers.Referer = REFER;
 
-    return out;
+        if (s.signCookie)
+            headers.Cookie = s.signCookie;
+
+        let type = (s.format || "m3u8").toLowerCase();
+        let media = parseMedia(s.url || "", type, headers);
+
+        return {
+            id: i + 1,
+            type,
+            url: s.url || "",
+            headers,
+            qualities: media.q,
+            audios: media.a,
+            subtitles: {
+                embedded: [],
+                external: subs
+            }
+        };
+    });
+}
+
+function handleStreams(req) {
+    return getData(req);
+}
+
+function handleDownload(req) {
+    return getData(req);
 }
