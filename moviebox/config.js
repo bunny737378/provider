@@ -1,8 +1,8 @@
 const S = "76iRl07s0xSN9jqmEWAt79EBJZulIQIsV64FZr2O";
 const C = JSON.stringify({
     "package_name": "com.community.oneroom",
-    "version_name": "5.0.02.0831.05",
-    "version_code": 50020130,
+    "version_name": "4.0.03.0922.03",
+    "version_code": 50020131,
     "os": "android",
     "os_version": "9",
     "install_ch": "ps",
@@ -18,8 +18,8 @@ const C = JSON.stringify({
     "sp_code": "40401",
     "X-Play-Mode": "2"
 });
-const U = "com.community.oneroom/50020042 (Linux; U; Android 9; en_US; 23078RKD5C; Build/PQ3A.190605.03081104; Cronet/135.0.7012.3)";
-const A = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjM1MDg3NDY3ODE4MDA2ODUzNjgsImV4cCI6MTc5MDI1NzU5NiwiaWF0IjoxNzgyNDgxMjk2fQ.5N-lc6Yhk3R4TxglIFZ_kXVZJ2ahQUmzz_jmmMMbqBA";
+const U = "com.community.oneroom/50020131 (Linux; U; Android 9; en_US; 23078RKD5C; Build/PQ3A.190605.03081104; Cronet/135.0.7012.3)";
+const A = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjM0MTA2NzY0MDkwOTY4ODI0MzIsImV4cCI6MTc5ODUzNjM4MiwiaWF0IjoxNzkwNzYwMDgyfQ.hyQpg6e0c-Xg9pXb2DnCyeIMuN9w1t1HMG1K_vidqcc";
 
 const API = "https://apii.inmoviebox.com/wefeed-mobile-bff/subject-api";
 const API_HOME = "https://apii.inmoviebox.com/wefeed-mobile-bff";
@@ -108,7 +108,7 @@ function callApi(u, method, bodyStr) {
     let headers = {
         "User-Agent": U,
         "Accept": "application/json",
-        "X-Client-Build": "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a",
+        "x-client-build": "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a",
         "Content-Type": "application/json; charset=utf-8",
         "X-Client-Token": genToken(ts),
         "x-tr-signature": genSignature(m, "application/json", "application/json; charset=utf-8", u, b, ts),
@@ -146,8 +146,6 @@ function handleRequest(reqJsonStr) {
             res = handleSeasons(req);
         } else if (type === "stream") {
             res = handleStreams(req);
-        } else if (type === "download") {
-            res = handleDownload(req);  // ← ALAG CLASS CALL
         } else if (type === "apislist") {
             res = getApisList();
         } else {
