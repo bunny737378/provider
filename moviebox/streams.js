@@ -132,9 +132,10 @@ function getData(req) {
 
         let type = (s.format || "m3u8").toLowerCase();
         let media = parseMedia(s.url || "", type, headers);
+        let nm = "Server " + (i + 1) + " [Dash]";
 
         return {
-            id: i + 1,
+            nm,
             type,
             url: s.url || "",
             headers,
