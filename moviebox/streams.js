@@ -94,7 +94,7 @@ function out(hls, mpd) {
         d.videos.forEach(v => {
             out.push({
                 id: out.length + 1,
-                type: "mp4",
+                type: "mkv",
                 url: v.url,
                 headers: mp4Headers,
                 qualities: v.quality ? [v.quality] : [],
