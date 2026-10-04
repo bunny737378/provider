@@ -1,179 +1,157 @@
-function handleStreams(req) {
-let i = req.id || "", mt = req.type || "";
-let headers = { Origin: URL, Referer: URL + "/" };
-let mp4Headers = { "Accept-Encoding": "identity" };
-
-function m3u8(u) {
-    let q = [], a = [], s = [];
+function parseMedia(u, type, headers) {
+    let q = [], a = [];
 
     try {
-        let t = JSON.parse(Network.get(u, JSON.stringify(headers))).body || "";
+        let r = Network.get(u, JSON.stringify(headers));
+        let t = JSON.parse(r).body || "";
+        type = (type || "").toLowerCase();
 
-        t.split(/\r?\n/).forEach(x => {
-            if (x.startsWith("#EXT-X-STREAM-INF:")) {
-                let m = x.match(/RESOLUTION=\d+x(\d+)/i);
-                if (m && !q.includes(m[1] + "p")) q.push(m[1] + "p");
-            }
+        if (type === "mpd" || type === "dash" || /\.mpd(?:\?|$)/i.test(u)) {
+            (t.match(/<Representation\b[^>]*>/gi) || []).forEach(x => {
+                let mime = (x.match(/\bmimeType="([^"]+)"/i) || [])[1] || "";
+                let codecs = (x.match(/\bcodecs="([^"]+)"/i) || [])[1] || "";
+                let height = (x.match(/\bheight="(\d+)"/i) || [])[1];
 
-            if (x.startsWith("#EXT-X-MEDIA:")) {
-                let type = (x.match(/TYPE=([^,]+)/i) || [])[1] || "";
-                let lang = (x.match(/LANGUAGE="([^"]*)"/i) || [])[1] || "";
-
-                if (lang && type === "AUDIO" && !a.includes(lang)) a.push(lang);
-                if (lang && type === "SUBTITLES" && !s.includes(lang)) s.push(lang);
-            }
-        });
-    } catch (e) {}
-
-    return {
-        qualities: q,
-        audios: a,
-        subtitles: { embedded: s, external: [] }
-    };
-}
-
-function dash(u) {
-    let videos = [], audios = [];
-
-    try {
-        let x = JSON.parse(Network.get(u, JSON.stringify(headers))).body || "";
-        let sets = /<AdaptationSet\b([^>]*)>([\s\S]*?)<\/AdaptationSet>/gi, m;
-
-        while ((m = sets.exec(x))) {
-            let attrs = m[1], body = m[2];
-
-            if (/contentType=["']audio["']/i.test(attrs)) {
-                let l = (attrs.match(/\blang=["']([^"']+)["']/i) || [])[1] || "";
-                if (l && !audios.includes(l)) audios.push(l);
-                continue;
-            }
-
-            if (!/contentType=["']video["']/i.test(attrs)) continue;
-
-            let reps = /<Representation\b([^>]*)>([\s\S]*?)<\/Representation>/gi, r;
-
-            while ((r = reps.exec(body))) {
-                let h = (r[1].match(/\bheight=["'](\d+)["']/i) || [])[1] || "";
-                let init = (r[2].match(/<SegmentTemplate\b[^>]*initialization=["']([^"']+)["']/i) || [])[1] || "";
-                if (!init) continue;
-
-                let file = init.split("/").pop();
-                let base = u.replace(/\/dash\/[^/?#]+(?:[?#].*)?$/i, "/mxv_download/");
-
-                videos.push({
-                    url: base + file,
-                    quality: h ? h + "p" : ""
-                });
-            }
-        }
-    } catch (e) {}
-
-    return { videos: videos, audios: audios };
-}
-
-function out(hls, mpd) {
-    let out = [];
-
-    if (hls) {
-        let p = m3u8(hls);
-
-        out.push({
-            id: 1,
-            type: "m3u8",
-            url: hls,
-            headers: headers,
-            qualities: p.qualities,
-            audios: p.audios,
-            subtitles: p.subtitles
-        });
-    }
-
-    if (mpd) {
-        let d = dash(mpd);
-
-        d.videos.forEach(v => {
-            out.push({
-                id: out.length + 1,
-                type: "mkv",
-                url: v.url,
-                headers: mp4Headers,
-                qualities: v.quality ? [v.quality] : [],
-                audios: d.audios,
-                subtitles: {
-                    embedded: [],
-                    external: []
+                if (
+                    (/video/i.test(mime) ||
+                    /^(avc|hev|hvc|vp8|vp9|av01)/i.test(codecs)) &&
+                    height &&
+                    !q.includes(height + "p")
+                ) {
+                    q.push(height + "p");
                 }
             });
-        });
-    }
 
-    return out;
+            (t.match(/<AdaptationSet\b[\s\S]*?(?=<AdaptationSet\b|<\/Period>)/gi) || [])
+                .forEach(x => {
+                    let contentType = (x.match(/\bcontentType="([^"]+)"/i) || [])[1] || "";
+                    let mimeType = (x.match(/\bmimeType="([^"]+)"/i) || [])[1] || "";
+                    let lang = (x.match(/\blang="([^"]+)"/i) || [])[1] || "";
+
+                    if (
+                        lang &&
+                        (/audio/i.test(contentType) || /audio/i.test(mimeType)) &&
+                        !a.includes(lang)
+                    ) {
+                        a.push(lang);
+                    }
+                });
+
+            if (!a.length) {
+                (t.match(/\blang="([^"]+)"/gi) || []).forEach(x => {
+                    let lang = (x.match(/"([^"]+)"/) || [])[1];
+
+                    if (lang && !a.includes(lang))
+                        a.push(lang);
+                });
+            }
+        } else {
+            t.split(/\r?\n/).forEach(x => {
+                if (x.startsWith("#EXT-X-STREAM-INF:")) {
+                    let m = x.match(/RESOLUTION=\d+x(\d+)/i);
+
+                    if (m && !q.includes(m[1] + "p"))
+                        q.push(m[1] + "p");
+                }
+
+                if (x.startsWith("#EXT-X-MEDIA:")) {
+                    let mediaType = (x.match(/TYPE=([^,]+)/i) || [])[1] || "";
+                    let lang = (x.match(/LANGUAGE="([^"]*)"/i) || [])[1] || "";
+
+                    if (
+                        mediaType.toUpperCase() === "AUDIO" &&
+                        lang &&
+                        !a.includes(lang)
+                    ) {
+                        a.push(lang);
+                    }
+                }
+            });
+        }
+
+        q.sort((x, y) => parseInt(x) - parseInt(y));
+    } catch (e) {}
+
+    return { q, a };
 }
 
-try {
-    if (mt === "movie") {
-        let b = JSON.parse(
-            Network.get(
-                URL + "/detail/movie/" + i,
-                JSON.stringify(headers)
-            )
-        ).body || "";
+function getData(req) {
+    let p = (req.id || "").split("--");
+    let f = p[0]?.split("-");
 
-        let hls = (b.match(
-            /"contentUrl":"(https?:\/\/[^"]+\.m3u8)"/i
-        ) || [])[1] || "";
+    if (p.length !== 2 || f.length !== 3)
+        return [];
 
-        let mpd = (b.match(
-            /"dash"\s*:\s*\{\s*"high"\s*:\s*"([^"]+\.mpd)"/i
-        ) || [])[1] || "";
+    let [sid, se, ep] = f;
 
-        return out(hls, mpd ? CDN + mpd : "");
-    }
+    let play = callApi(
+        API + "/play-info?subjectId=" + sid +
+        "&se=" + parseInt(se) +
+        "&ep=" + parseInt(ep),
+        "GET"
+    );
 
-    let p = i.split("-");
-    if (p.length !== 2) return [];
+    if (!play?.data?.streams?.length)
+        return [];
 
-    let sid = p[0], ep = parseInt(p[1]);
-    let u = API + "/detail/tab/tvshowepisodes?type=season&id=" + sid;
-    let n = 1;
+    let streams = play.data.streams;
+    let first = streams[0];
+    let subs = [];
 
-    while (u) {
-        try {
-            let b = JSON.parse(
-                JSON.parse(
-                    Network.get(u, JSON.stringify(headers))
-                ).body || "{}"
+    if (first?.id) {
+        let c = callApi(
+            API + "/get-stream-captions?subjectId=" + sid +
+            "&streamId=" + first.id,
+            "GET"
+        );
+
+        if (!c?.data?.extCaptions?.length) {
+            c = callApi(
+                API_RES + "/get-ext-captions?subjectId=" + sid +
+                "&resourceId=" + first.id,
+                "GET"
             );
+        }
 
-            let items = b.items || [];
-            if (!items.length) break;
-
-            for (let e of items) {
-                if (n++ === ep) {
-                    let s = e.stream || {};
-                    let hls = (s.hls || {}).high || "";
-                    let mpd = (s.dash || {}).high || "";
-
-                    return out(
-                        hls ? CDN + hls : "",
-                        mpd ? CDN + mpd : ""
-                    );
-                }
-            }
-
-            u = b.next
-                ? API + "/detail/tab/tvshowepisodes?type=season&" +
-                  b.next + "&id=" + sid
-                : null;
-
-        } catch (e) {
-            break;
+        if (c?.data?.extCaptions) {
+            subs = c.data.extCaptions.map(x => ({
+                label: x.lan || "",
+                url: x.url || ""
+            }));
         }
     }
 
-    return [];
-} catch (e) {
-    return [];
+    return streams.map((s, i) => {
+        let headers = {};
+
+        if (REFER)
+            headers.Referer = REFER;
+
+        if (s.signCookie)
+            headers.Cookie = s.signCookie;
+
+        let type = (s.format || "m3u8").toLowerCase();
+        let media = parseMedia(s.url || "", type, headers);
+
+        return {
+            id: i + 1,
+            type,
+            url: s.url || "",
+            headers,
+            qualities: media.q,
+            audios: media.a,
+            subtitles: {
+                embedded: [],
+                external: subs
+            }
+        };
+    });
 }
 
+function handleStreams(req) {
+    return getData(req);
+}
+
+function handleDownload(req) {
+    return getData(req);
 }
