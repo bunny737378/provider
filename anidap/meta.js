@@ -22,9 +22,15 @@ function handleMeta(req) {
         if (data.status) tags.push(data.status);
         if (data.season) tags.push(data.season);
         if (data.seasonYear) tags.push(String(data.seasonYear));
+
+        // Format genres as clean strings (never { id, name } objects)
         if (Array.isArray(data.genres)) {
             data.genres.forEach(function(g) {
-                if (g) tags.push(g);
+                if (!g) return;
+                let name = typeof g === "object" ? (g.name || g.tag || g.title || "") : String(g);
+                if (name && tags.indexOf(name) === -1) {
+                    tags.push(name);
+                }
             });
         }
 
@@ -45,23 +51,50 @@ function handleMeta(req) {
             });
         }
 
+        // Recommendations & Relations formatted into MOVIEAPPP MediaItem objects
         let recommend = [];
-        if (Array.isArray(data.recommendations)) {
-            data.recommendations.forEach(function(r) {
-                let t = r.title || {};
-                let title = t.english || t.romaji || t.userPreferred || r.name || "";
-                let img = r.image || r.cover || "";
-                let recId = String(r.id || r.slug || "");
-                if (recId && title) {
+        let recList = (data.recommendations && Array.isArray(data.recommendations)) ? data.recommendations : [];
+        let relList = (data.relations && Array.isArray(data.relations)) ? data.relations : [];
+        let combinedRec = recList.concat(relList);
+
+        combinedRec.forEach(function(r) {
+            if (!r) return;
+            let title = r.englishTitle || r.romajiTitle || "";
+            if (!title && r.title) {
+                title = typeof r.title === "object" ? (r.title.english || r.title.romaji || r.title.userPreferred || "") : String(r.title);
+            }
+            if (!title && r.name) title = r.name;
+
+            let img = "";
+            if (r.coverImage) {
+                img = typeof r.coverImage === "string" ? r.coverImage : (r.coverImage.large || r.coverImage.extraLarge || "");
+            }
+            if (!img && r.coverImages) {
+                img = typeof r.coverImages === "string" ? r.coverImages : (r.coverImages.large || r.coverImages.extraLarge || "");
+            }
+            if (!img) img = r.image || r.cover || "";
+
+            let recId = String(r.id || r.sourceId || r.slug || r.anilistId || "");
+            let recType = (r.format || r.type || "tv").toLowerCase() === "movie" ? "movie" : "tv";
+
+            if (recId && title) {
+                let exists = false;
+                for (let k = 0; k < recommend.length; k++) {
+                    if (recommend[k].id === recId) {
+                        exists = true;
+                        break;
+                    }
+                }
+                if (!exists) {
                     recommend.push({
                         titel: title,
                         Img: img,
                         id: recId,
-                        Type: (r.type || "").toLowerCase() === "movie" ? "movie" : "tv"
+                        Type: recType
                     });
                 }
-            });
-        }
+            }
+        });
 
         return {
             basic: {
