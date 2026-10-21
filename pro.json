@@ -5,6 +5,11 @@
     "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/moviebox/moviebox.png"
   },
   {
+    "id": "anidap",
+    "name": "AniDap",
+    "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/anidap/anidap.png"
+  },
+  {
     "id": "mxplayer",
     "name": "MX Player",
     "icon": "https://raw.githubusercontent.com/bunny737378/provider/main/mxplayer/mxplayer.png"
