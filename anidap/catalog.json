@@ -1,0 +1,14 @@
+{
+  "Trending": [
+    { "i": "slug-trending", "nm": "Spotlight Anime" },
+    { "i": "trending", "nm": "Trending Now" }
+  ],
+  "Recent": [
+    { "i": "slug-recents", "nm": "Latest Broadcasts" },
+    { "i": "recents", "nm": "Recently Updated" }
+  ],
+  "Top Airing": [
+    { "i": "slug-top-airing", "nm": "Hot On Air" },
+    { "i": "top-airing", "nm": "Top Airing Series" }
+  ]
+}
