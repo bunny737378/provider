@@ -1,7 +1,7 @@
 const S = "76iRl07s0xSN9jqmEWAt79EBJZulIQIsV64FZr2O";
 const C = JSON.stringify({
     "package_name": "com.community.oneroom",
-    "version_name": "4.0.03.1013",
+    "version_name": "4.0.03.1013.indus",
     "version_code": 50020132,
     "os": "android",
     "os_version": "9",
