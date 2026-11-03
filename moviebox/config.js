@@ -1,8 +1,8 @@
 const S = "76iRl07s0xSN9jqmEWAt79EBJZulIQIsV64FZr2O";
 const C = JSON.stringify({
     "package_name": "com.community.oneroom",
-    "version_name": "4.0.03.0922.03",
-    "version_code": 50020131,
+    "version_name": "4.0.03.1013",
+    "version_code": 50020132,
     "os": "android",
     "os_version": "9",
     "install_ch": "ps",
@@ -18,7 +18,7 @@ const C = JSON.stringify({
     "sp_code": "40401",
     "X-Play-Mode": "2"
 });
-const U = "com.community.oneroom/50020131 (Linux; U; Android 9; en_US; 23078RKD5C; Build/PQ3A.190605.03081104; Cronet/135.0.7012.3)";
+const U = "com.community.oneroom/50020132 (Linux; U; Android 9; en_US; 23078RKD5C; Build/PQ3A.190605.03081104; Cronet/135.0.7012.3)";
 const A = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1aWQiOjM0MTA2NzY0MDkwOTY4ODI0MzIsImV4cCI6MTc5ODUzNjM4MiwiaWF0IjoxNzkwNzYwMDgyfQ.hyQpg6e0c-Xg9pXb2DnCyeIMuN9w1t1HMG1K_vidqcc";
 
 const API = "https://apii.inmoviebox.com/wefeed-mobile-bff/subject-api";
