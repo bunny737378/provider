@@ -26,6 +26,24 @@ const API_HOME = "https://apii.inmoviebox.com/wefeed-mobile-bff";
 const API_RES = "https://apii.inmoviebox.com/wefeed-mobile-bff/subject-api/resource";
 const REFER = "https://apii.inmoviebox.com";
 
+var CERT_SHA256 = "03d4b741632d136bc23e2de4c6adcdb7712f1980b619c183221801730bbd0410";
+
+function pad6(n) {
+    var s = "" + n;
+    while (s.length < 6) s = "0" + s;
+    return s;
+}
+
+function genClientBuild() {
+    var ms = Date.now();
+    var sec = Math.floor(ms / 1000);
+    var usec = (ms % 1000) * 1000;
+    var r = Math.floor(Math.random() * 1000);
+    var body = sec + pad6(usec) + r;
+    var digest = Crypto.md5Hex(CERT_SHA256 + "oneroom" + body);
+    return body + "." + digest;
+}
+
 function genToken(ts) {
     let t = ts.toString();
     let rev = t.split('').reverse().join('');
@@ -108,7 +126,7 @@ function callApi(u, method, bodyStr) {
     let headers = {
         "User-Agent": U,
         "Accept": "application/json",
-        "x-client-build": "1790144723381916466.632cf3fe507b339bc757f117f85b4c4a",
+        "x-client-build": genClientBuild(),
         "Content-Type": "application/json; charset=utf-8",
         "X-Client-Token": genToken(ts),
         "x-tr-signature": genSignature(m, "application/json", "application/json; charset=utf-8", u, b, ts),
